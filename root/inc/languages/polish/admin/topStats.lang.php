@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Top Stats plugin for MyBB.
- * Copyright (C) 2010-2013 baszaR & LukasAMD & Supryk
+ * Copyright (C) 2010-2018 baszaR & LukasAMD & Supryk & Marcin648
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -40,13 +40,6 @@ $l['topStats_IgnoreForums_LastThreadsDesc'] = "Wpisz FID for które nie mają by
 $l['topStats_Limit_LastThreads'] = "Limit najnowszych tematów";
 $l['topStats_Limit_LastThreadsDesc'] = "";
 
-$l['topStats_Status_LastPosts'] = "Najnowsze posty";
-$l['topStats_Status_LastPostsDesc'] = "Wyświetlanie widgetu z najnowszymi postami.";
-$l['topStats_IgnoreForums_LastPosts'] = "Ignorowane fora dla najnowszych postów";
-$l['topStats_IgnoreForums_LastPostsDesc'] = "Wpisz FID for które nie mają być brane pod uwage, jeśli więcej niż jedno oddziel przecinkami. Tematy z tych for nie będą wyświetlane.";
-$l['topStats_Limit_LastPosts'] = "Limit najnowszych postów";
-$l['topStats_Limit_LastPostsDesc'] = "";
-
 $l['topStats_Status_LastActiveThreads'] = "Ostatnio aktywne tematy";
 $l['topStats_Status_LastActiveThreadsDesc'] = "Wyświetlanie widgetu z ostatnio aktywnymi tematami.";
 $l['topStats_IgnoreForums_LastActiveThreads'] = "Ignorowane fora dla ostatnio aktywnych tematów";
@@ -82,12 +75,12 @@ $l['topStats_IgnoreGroups_ReferralsDesc'] = "Wpisz GID grup które nie mają by�
 $l['topStats_Limit_Referrals'] = "Limit użytkowników (polecający)";
 $l['topStats_Limit_ReferralsDesc'] = "";
 
-$l['topStats_Status_Timeonline'] = "Użytkownicy będący najdłużej online";
-$l['topStats_Status_TimeonlineDesc'] = "Wyświetlanie widgetu z listą użytkowników będących najdłużej online.";
-$l['topStats_IgnoreGroups_Timeonline'] = "Ignorowane grupy dla użytkowników (online)";
-$l['topStats_IgnoreGroups_TimeonlineDesc'] = "Wpisz GID grup które nie mają być brane pod uwage, jeśli więcej niż jedno oddziel przecinkami. Użytkownicy z tych grup nie będą wyświetlani.";
-$l['topStats_Limit_Timeonline'] = "Limit użytkowników (online)";
-$l['topStats_Limit_TimeonlineDesc'] = "";
+$l['topStats_Status_TimeOnline'] = "Użytkownicy będący najdłużej online";
+$l['topStats_Status_TimeOnlineDesc'] = "Wyświetlanie widgetu z listą użytkowników będących najdłużej online.";
+$l['topStats_IgnoreGroups_TimeOnline'] = "Ignorowane grupy dla użytkowników (online)";
+$l['topStats_IgnoreGroups_TimeOnlineDesc'] = "Wpisz GID grup które nie mają być brane pod uwage, jeśli więcej niż jedno oddziel przecinkami. Użytkownicy z tych grup nie będą wyświetlani.";
+$l['topStats_Limit_TimeOnline'] = "Limit użytkowników (online)";
+$l['topStats_Limit_TimeOnlineDesc'] = "";
 
 $l['topStats_Status_NewestUsers'] = "Najnowsi użytkownicy";
 $l['topStats_Status_NewestUsersDesc'] = "Wyświetlanie widgetu z listą najnowszych użytkowników.";
@@ -96,8 +89,17 @@ $l['topStats_IgnoreGroups_NewestUsersDesc'] = "Wpisz GID grup które nie mają b
 $l['topStats_Limit_NewestUsers'] = "Limit użytkowników (najnowsi)";
 $l['topStats_Limit_NewestUsersDesc'] = "";
 
+$l['topStats_Status_Moderators'] = "Najaktywniejsi moderatorzy";
+$l['topStats_Status_ModeratorsDesc'] = "Wyświetlanie widgetu z listą najaktywniejszych moderatorów.";
+$l['topStats_Limit_Moderators'] = "Limit użytkowników (najaktywniejsi moderatorzy)";
+$l['topStats_Limit_ModeratorsDesc'] = "";
+
 $l['topStats_Status_Avatar'] = "Wyświetlanie awatarów";
 $l['topStats_Status_AvatarDesc'] = "Wyświetlanie awatarów użytowników i autorów tematów w  statystykach.";
 
 $l['topStats_AvatarWidth'] = "Szerokość i wysokość avatara";
 $l['topStats_AvatarWidthDesc'] = "Ustaw szerokość i wysokość awatara np.: 32x32.";
+
+$l['topStats_Status_UpcomingEvents'] = "Nadchodzące wydarzenia";
+$l['topStats_Status_UpcomingEventsDesc'] = "Wyświetlanie widgetu z nadchodzącymi wydarzeniami.";
+$l['topStats_Limit_UpcomingEvents'] = "Limit nadchodzących wydarzeń";

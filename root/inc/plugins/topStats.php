@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Top Stats plugin for MyBB.
- * Copyright (C) 2010-2013 baszaR & LukasAMD & Supryk
+ * Copyright (C) 2010-2018 baszaR & LukasAMD & Supryk & Marcin648
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -42,9 +42,9 @@ function topStats_info()
         'name'          => $lang->topStats_Name,
         'description'   => $lang->topStats_NameDesc,
 		'website'		=> 'http://mybboard.pl/',
-		'author'		=> 'baszaR & LukasAMD & Supryk',
+		'author'		=> 'baszaR & LukasAMD & Supryk & Marcin648',
 		'authorsite'	=> 'http://mybboard.pl/',
-		'version'		=> '1.0.2',
+		'version'		=> '1.0.6',
 		'guid'			=> '',
 		'compatibility' => '18*',
 		'codename' => 'topStats_',
@@ -128,9 +128,11 @@ class topStats
             'MostViews'     => '',
             'Posters'       => '',
             'Reputation'    => '',
-			'Referrals' => '',
-            'Timeonline'    => '',
+			'Referrals'		=> '',
+            'TimeOnline'    => '',
             'NewestUsers'   => '',
+			'Moderators'    => '',
+			'UpcomingEvents'=> '',
         );
 
     	if (!$this->getConfig('Status_All'))
@@ -139,11 +141,6 @@ class topStats
         }
 
         $lang->load("topStats");
-    	if ($this->getConfig('Status_LastPosts'))
-        {
-            $plugins->hooks["index_start"][10]["topStats_LastPosts"] = array("function" => create_function('', 'global $plugins; $plugins->objects[\'topStats\']->widget_LastPosts();'));
-            $templatelist .= ',topStats_LastPosts,topStats_LastPostsRow,topStats_LastPostsAvatar';    
-        }
     	if ($this->getConfig('Status_LastThreads'))
         {
             $plugins->hooks["index_start"][10]["topStats_LastThreads"] = array("function" => create_function('', 'global $plugins; $plugins->objects[\'topStats\']->widget_LastThreads();'));
@@ -174,52 +171,26 @@ class topStats
             $plugins->hooks["index_start"][10]["topStats_Referrals"] = array("function" => create_function('', 'global $plugins; $plugins->objects[\'topStats\']->widget_Referrals();'));
             $templatelist .= ',topStats_Referrals,topStats_ReferralsRow,topStats_ReferralsAvatar';    
         }
-    	if ($this->getConfig('Status_Timeonline'))
+    	if ($this->getConfig('Status_TimeOnline'))
         {
-            $plugins->hooks["index_start"][10]["topStats_Timeonline"] = array("function" => create_function('', 'global $plugins; $plugins->objects[\'topStats\']->widget_Timeonline();'));
-            $templatelist .= ',topStats_Timeonline,topStats_TimeonlineRow,topStats_TimeonlineAvatar';    
+            $plugins->hooks["index_start"][10]["topStats_TimeOnline"] = array("function" => create_function('', 'global $plugins; $plugins->objects[\'topStats\']->widget_TimeOnline();'));
+            $templatelist .= ',topStats_TimeOnline,topStats_TimeOnlineRow,topStats_TimeOnlineAvatar';    
         }
     	if ($this->getConfig('Status_NewestUsers'))
         {
             $plugins->hooks["index_start"][10]["topStats_NewestUsers"] = array("function" => create_function('', 'global $plugins; $plugins->objects[\'topStats\']->widget_NewestUsers();'));
-            $templatelist .= ',topStats_NewestUsers,topStats_NewestUsersAvatar';    
+            $templatelist .= ',topStats_NewestUsers,topStats_NewestUsersRow,topStats_NewestUsersAvatar';    
         }   
-    }
-    
-    
-    /**
-     * Widget with last posts list
-     *   
-     */ 
-    public function widget_LastPosts()
-    {   
-        global $db, $lang, $mybb, $templates, $theme, $topStats;
-		
-		$tpl['ignore_forums'] = '';
-		if (!empty($mybb->settings['topStats_IgnoreForums_LastPosts']))
-		{
-			$tpl['ignore_forums'] = "AND t.fid NOT IN ({$mybb->settings['topStats_IgnoreForums_LastPosts']})";
-		}	
-        $tpl['row'] = '';
-    
-        $sql = "SELECT t.uid, t.tid, t.subject, t.dateline, t.fid, u.usergroup, u.displaygroup, u.avatar, u.avatardimensions, u.username, u.uid
-                FROM ".TABLE_PREFIX."threads AS t
-                INNER JOIN ".TABLE_PREFIX."users AS u USING (uid) 
-                WHERE " . $this->buildThreadsWhere() ." ". $tpl['ignore_forums']. "
-                ORDER BY t.lastpost DESC LIMIT ". (int) $this->getConfig('Limit_LastPosts') ."";
-        $result = $db->query($sql);
-        while ($row = $db->fetch_array($result))
+	    if ($this->getConfig('Status_Moderators'))
         {
-            $tpl['subject'] = (my_strlen($row['subject']) > 30) ? my_substr($row['subject'], 0, 30) . "..." : $row['subject'];
-            $tpl['username'] = format_name($row['username'], $row['usergroup'], $row['displaygroup']);
-    		$tpl['profilelink'] = build_profile_link($tpl['username'], $row['uid']);
-            $tpl['date'] = my_date($mybb->settings['dateformat'] . " " . $mybb->settings['timeformat'], $row['dateline']);
-    		$tpl['subjectlink'] = get_thread_link($row['tid'], 0, 'lastpost');
-			$useravatar = format_avatar(htmlspecialchars_uni($row['avatar']), $row['avatardimensions'], my_strtolower($this->getConfig('AvatarWidth')));
-            (!$this->getConfig('Status_Avatar')) ? '' : eval("\$tpl['avatar'] = \"".$templates->get("topStats_LastPostsAvatar")."\";");
-            eval("\$tpl['row'] .= \"" . $templates->get("topStats_LastPostsRow") . "\";");
+            $plugins->hooks["index_start"][10]["topStats_Moderators"] = array("function" => create_function('', 'global $plugins; $plugins->objects[\'topStats\']->widget_Moderators();'));
+            $templatelist .= ',topStats_Moderators,topStats_ModeratorsRow,topStats_ModeratorsAvatar';    
         }
-        eval("\$topStats['LastPosts'] = \"" . $templates->get("topStats_LastPosts") . "\";");
+		if ($this->getConfig('Status_UpcomingEvents'))
+        {
+            $plugins->hooks["index_start"][10]["topStats_UpcomingEvents"] = array("function" => create_function('', 'global $plugins; $plugins->objects[\'topStats\']->widget_UpcomingEvents();'));
+            $templatelist .= ',topStats_UpcomingEvents,topStats_UpcomingEventsRow,topStats_UpcomingEventsAvatar';    
+        }  
     }
     
     /**
@@ -229,26 +200,59 @@ class topStats
     public function widget_LastThreads()
     {   
         global $db, $lang, $mybb, $templates, $theme, $topStats;
+
+		require_once MYBB_ROOT."inc/class_parser.php";
+		require_once MYBB_ROOT."inc/functions_search.php";
+		
+		$parser = new postParser;
+		
+		$permsql = "";
+		$onlyusfids = array();
+		$group_permissions = forum_permissions();
+		foreach($group_permissions as $fid => $forum_permissions)
+		{
+			if(isset($forum_permissions['canonlyviewownthreads']) && $forum_permissions['canonlyviewownthreads'] == 1)
+			{
+				$onlyusfids[] = $fid;
+			}
+		}
+		if(!empty($onlyusfids))
+		{
+			$permsql .= "AND ((t.fid IN(".implode(',', $onlyusfids).") AND t.uid='{$mybb->user['uid']}') OR t.fid NOT IN(".implode(',', $onlyusfids)."))";
+		}
+
+		$unsearchforums = get_unsearchable_forums();
+		if($unsearchforums)
+		{
+			$permsql .= " AND t.fid NOT IN ($unsearchforums)";
+		}
+		$inactiveforums = get_inactive_forums();
+		if($inactiveforums)
+		{
+			$permsql .= " AND t.fid NOT IN ($inactiveforums)";
+		}
 		
 		$tpl['ignore_forums'] = '';
-		if (!empty($mybb->settings['topStats_IgnoreForums_LastThreads']))
+		if(!empty($mybb->settings['topStats_IgnoreForums_LastThreads']))
 		{
 			$tpl['ignore_forums'] = "AND t.fid NOT IN ({$mybb->settings['topStats_IgnoreForums_LastThreads']})";
 		}	
+
         $tpl['row'] = '';
     
         $sql = "SELECT t.uid, t.tid, t.subject, t.dateline, t.fid, u.usergroup, u.displaygroup, u.avatar, u.avatardimensions, u.username, u.uid
                 FROM ".TABLE_PREFIX."threads AS t
                 INNER JOIN ".TABLE_PREFIX."users AS u USING (uid) 
-                WHERE " . $this->buildThreadsWhere() ." ". $tpl['ignore_forums']. "
-                ORDER BY t.tid DESC LIMIT ". (int) $this->getConfig('Limit_LastThreads') ."";
+                WHERE 1=1 {$tpl['ignore_forums']} {$unapproved_where} {$permsql} AND t.visible='1' AND t.closed NOT LIKE 'moved|%'
+                ORDER BY t.tid DESC LIMIT ". (int)$this->getConfig('Limit_LastThreads') ."";
         $result = $db->query($sql);
         while ($row = $db->fetch_array($result))
         {
-            $tpl['subject'] = (my_strlen($row['subject']) > 30) ? my_substr($row['subject'], 0, 30) . "..." : $row['subject'];
+			$subject = $parser->parse_badwords(htmlspecialchars_uni($row['subject']));
+			$tpl['subject'] = (my_strlen($subject) > 30) ? my_substr($subject, 0, 30) . "..." : $subject;
             $tpl['username'] = format_name($row['username'], $row['usergroup'], $row['displaygroup']);
     		$tpl['profilelink'] = build_profile_link($tpl['username'], $row['uid']);
-            $tpl['date'] = my_date($mybb->settings['dateformat'] . " " . $mybb->settings['timeformat'], $row['dateline']);
+            $tpl['date'] = my_date('relative', $row['dateline']);
     		$tpl['subjectlink'] = get_thread_link($row['tid']);
 			$useravatar = format_avatar(htmlspecialchars_uni($row['avatar']), $row['avatardimensions'], my_strtolower($this->getConfig('AvatarWidth')));
             (!$this->getConfig('Status_Avatar')) ? '' : eval("\$tpl['avatar'] = \"".$templates->get("topStats_LastThreadsAvatar")."\";");
@@ -265,25 +269,58 @@ class topStats
     {   
         global $db, $lang, $mybb, $templates, $theme, $topStats;
 		
+		require_once MYBB_ROOT."inc/class_parser.php";
+		require_once MYBB_ROOT."inc/functions_search.php";
+		
+		$parser = new postParser;
+		
+		$permsql = "";
+		$onlyusfids = array();
+		$group_permissions = forum_permissions();
+		foreach($group_permissions as $fid => $forum_permissions)
+		{
+			if(isset($forum_permissions['canonlyviewownthreads']) && $forum_permissions['canonlyviewownthreads'] == 1)
+			{
+				$onlyusfids[] = $fid;
+			}
+		}
+		if(!empty($onlyusfids))
+		{
+			$permsql .= "AND ((t.fid IN(".implode(',', $onlyusfids).") AND t.uid='{$mybb->user['uid']}') OR t.fid NOT IN(".implode(',', $onlyusfids)."))";
+		}
+
+		$unsearchforums = get_unsearchable_forums();
+		if($unsearchforums)
+		{
+			$permsql .= " AND t.fid NOT IN ($unsearchforums)";
+		}
+		$inactiveforums = get_inactive_forums();
+		if($inactiveforums)
+		{
+			$permsql .= " AND t.fid NOT IN ($inactiveforums)";
+		}
+		
 		$tpl['ignore_forums'] = '';
-		if (!empty($mybb->settings['topStats_IgnoreForums_LastActiveThreads']))
+		if(!empty($mybb->settings['topStats_IgnoreForums_LastActiveThreads']))
 		{
 			$tpl['ignore_forums'] = "AND t.fid NOT IN ({$mybb->settings['topStats_IgnoreForums_LastActiveThreads']})";
 		}	
+
         $tpl['row'] = '';
     
         $sql = "SELECT t.lastposteruid, t.tid, t.subject, t.lastpost, t.fid, u.usergroup, u.displaygroup, u.avatar, u.avatardimensions, u.username, u.uid
                 FROM ".TABLE_PREFIX."threads t
                 INNER JOIN ".TABLE_PREFIX."users u ON (u.uid=t.lastposteruid) 
-                WHERE " . $this->buildThreadsWhere() ." ". $tpl['ignore_forums']. "
-                ORDER BY t.lastpost DESC LIMIT ". (int) $this->getConfig('Limit_LastActiveThreads') ."";
+                WHERE 1=1 {$tpl['ignore_forums']} {$unapproved_where} {$permsql} AND t.visible='1' AND t.closed NOT LIKE 'moved|%'
+                ORDER BY t.lastpost DESC LIMIT ". (int)$this->getConfig('Limit_LastActiveThreads') ."";
         $result = $db->query($sql);
         while ($row = $db->fetch_array($result))
         {
-            $tpl['subject'] = (my_strlen($row['subject']) > 30) ? my_substr($row['subject'], 0, 30) . "..." : $row['subject'];
+			$subject = $parser->parse_badwords(htmlspecialchars_uni($row['subject']));
+			$tpl['subject'] = (my_strlen($subject) > 30) ? my_substr($subject, 0, 30) . "..." : $subject;
             $tpl['username'] = format_name($row['username'], $row['usergroup'], $row['displaygroup']);
     		$tpl['profilelink'] = build_profile_link($tpl['username'], $row['uid']);
-            $tpl['date'] = my_date($mybb->settings['dateformat'] . " " . $mybb->settings['timeformat'], $row['lastpost']);
+            $tpl['date'] = my_date('relative', $row['lastpost']);
     		$tpl['subjectlink'] = get_thread_link($row['tid']);
 			$useravatar = format_avatar(htmlspecialchars_uni($row['avatar']), $row['avatardimensions'], my_strtolower($this->getConfig('AvatarWidth')));
             (!$this->getConfig('Status_Avatar')) ? '' : eval("\$tpl['avatar'] = \"".$templates->get("topStats_LastActiveThreadsAvatar")."\";");
@@ -300,25 +337,59 @@ class topStats
     {
         global $db, $lang, $mybb, $templates, $theme, $topStats;
 
+		require_once MYBB_ROOT."inc/class_parser.php";
+		require_once MYBB_ROOT."inc/functions_search.php";
+		
+		$parser = new postParser;
+		
+		$permsql = "";
+		$onlyusfids = array();
+		$group_permissions = forum_permissions();
+		foreach($group_permissions as $fid => $forum_permissions)
+		{
+			if(isset($forum_permissions['canonlyviewownthreads']) && $forum_permissions['canonlyviewownthreads'] == 1)
+			{
+				$onlyusfids[] = $fid;
+			}
+		}
+		if(!empty($onlyusfids))
+		{
+			$permsql .= "AND ((t.fid IN(".implode(',', $onlyusfids).") AND t.uid='{$mybb->user['uid']}') OR t.fid NOT IN(".implode(',', $onlyusfids)."))";
+		}
+
+		$unsearchforums = get_unsearchable_forums();
+		if($unsearchforums)
+		{
+			$permsql .= " AND t.fid NOT IN ($unsearchforums)";
+		}
+		$inactiveforums = get_inactive_forums();
+		if($inactiveforums)
+		{
+			$permsql .= " AND t.fid NOT IN ($inactiveforums)";
+		}
+		
 		$tpl['ignore_forums'] = '';
-		if (!empty($mybb->settings['topStats_IgnoreForums_MostViews']))
+		
+		if(!empty($mybb->settings['topStats_IgnoreForums_MostViews']))
 		{
 			$tpl['ignore_forums'] = "AND t.fid NOT IN ({$mybb->settings['topStats_IgnoreForums_MostViews']})";
 		}		
+
         $tpl['row'] = '';
     
         $sql = "SELECT t.uid, t.tid, t.subject, t.dateline, t.fid, t.views, u.usergroup, u.displaygroup, u.avatar, u.avatardimensions, u.username, u.uid
                 FROM ".TABLE_PREFIX."threads AS t
                 INNER JOIN ".TABLE_PREFIX."users AS u USING (uid) 
-                WHERE " . $this->buildThreadsWhere() ." ". $tpl['ignore_forums']. "
-                ORDER BY t.views DESC LIMIT ". (int) $this->getConfig('Limit_MostViews') ."";
+                WHERE 1=1 {$tpl['ignore_forums']} {$unapproved_where} {$permsql} AND t.visible='1' AND t.closed NOT LIKE 'moved|%'
+                ORDER BY t.views DESC LIMIT ". (int)$this->getConfig('Limit_MostViews') ."";
         $result = $db->query($sql);
         while ($row = $db->fetch_array($result))
         {
-            $tpl['subject'] = (my_strlen($row['subject']) > 30) ? my_substr($row['subject'], 0, 30) . "..." : $row['subject'];
+			$subject = $parser->parse_badwords(htmlspecialchars_uni($row['subject']));
+			$tpl['subject'] = (my_strlen($subject) > 30) ? my_substr($subject, 0, 30) . "..." : $subject;
             $tpl['username'] = format_name($row['username'], $row['usergroup'], $row['displaygroup']);
     		$tpl['profilelink'] = build_profile_link($tpl['username'], $row['uid']);
-            $tpl['date'] = my_date($mybb->settings['dateformat'] . " " . $mybb->settings['timeformat'], $row['dateline']);
+            $tpl['date'] = my_date('relative', $row['dateline']);
     		$tpl['subjectlink'] = get_thread_link($row['tid']);
 			$tpl['views'] = my_number_format($row['views']);
             $useravatar = format_avatar(htmlspecialchars_uni($row['avatar']), $row['avatardimensions'], my_strtolower($this->getConfig('AvatarWidth')));
@@ -337,21 +408,24 @@ class topStats
         global $db, $lang, $mybb, $templates, $theme, $topStats;
 
 		$tpl['ignore_groups'] = '';
-		if (!empty($mybb->settings['topStats_IgnoreGroups_Posters']))
+		
+		if(!empty($mybb->settings['topStats_IgnoreGroups_Posters']))
 		{
 			$tpl['ignore_groups'] = " AND usergroup NOT IN ({$mybb->settings['topStats_IgnoreGroups_Posters']})";
 		}		
+		
+		$lang->topStats_topPosters = $lang->sprintf($lang->topStats_topPosters, (int)$this->getConfig('Limit_Posters'));
+		
         $tpl['row'] = '';
     
         $sql = "SELECT username, usergroup, displaygroup, postnum, uid, avatar, avatardimensions
                 FROM ".TABLE_PREFIX."users 
 				WHERE uid != '' ". $tpl['ignore_groups'] . "
                 ORDER BY postnum DESC 
-                LIMIT ". (int) $this->getConfig('Limit_Posters') ."";
+                LIMIT ".(int)$this->getConfig('Limit_Posters')."";
         $result = $db->query($sql);
         while ($row = $db->fetch_array($result))
         {
-			$tpl['limit'] = (int) $this->getConfig('Limit_Posters');
             $tpl['username'] = format_name($row['username'], $row['usergroup'], $row['displaygroup']);
     		$tpl['profilelink'] = build_profile_link($tpl['username'], $row['uid']);
     		$tpl['postnum'] = my_number_format($row['postnum']);
@@ -370,10 +444,14 @@ class topStats
         global $db, $lang, $mybb, $templates, $theme, $topStats;
 
 		$tpl['ignore_groups'] = '';
-		if (!empty($mybb->settings['topStats_IgnoreGroups_Reputation']))
+		
+		if(!empty($mybb->settings['topStats_IgnoreGroups_Reputation']))
 		{
 			$tpl['ignore_groups'] = " AND usergroup NOT IN ({$mybb->settings['topStats_IgnoreGroups_Reputation']})";
 		}	
+		
+		$lang->topStats_topReputation = $lang->sprintf($lang->topStats_topReputation, (int)$this->getConfig('Limit_Reputation'));
+		
         $tpl['row'] = '';
     
         $sql = "SELECT username, usergroup, displaygroup, reputation, uid, avatar, avatardimensions
@@ -384,7 +462,6 @@ class topStats
         $result = $db->query($sql);
         while ($row = $db->fetch_array($result))        
         {
-			$tpl['limit'] = (int) $this->getConfig('Limit_Reputation');
             $tpl['username'] = format_name($row['username'], $row['usergroup'], $row['displaygroup']);
     		$tpl['profilelink'] = build_profile_link($tpl['username'], $row['uid']);
     		$tpl['reputation'] = my_number_format($row['reputation']);
@@ -403,10 +480,14 @@ class topStats
         global $db, $lang, $mybb, $templates, $theme, $topStats;
 
 		$tpl['ignore_groups'] = '';
-		if (!empty($mybb->settings['topStats_IgnoreGroups_Referrals']))
+		
+		if(!empty($mybb->settings['topStats_IgnoreGroups_Referrals']))
 		{
 			$tpl['ignore_groups'] = " AND usergroup NOT IN ({$mybb->settings['topStats_IgnoreGroups_Referrals']})";
 		}	
+		
+		$lang->topStats_topReferrals = $lang->sprintf($lang->topStats_topReferrals, (int)$this->getConfig('Limit_Referrals'));
+		
         $tpl['row'] = '';
     
         $sql = "SELECT username, usergroup, displaygroup, referrals, uid, avatar, avatardimensions
@@ -427,8 +508,46 @@ class topStats
         }
         eval("\$topStats['Referrals'] = \"" . $templates->get("topStats_Referrals") . "\";");
     }
-    
+
     /**
+     * Widget with users online time
+     *   
+     */ 
+    public function widget_TimeOnline()
+    {
+        global $db, $lang, $mybb, $templates, $theme, $topStats;
+
+		$tpl['ignore_groups'] = '';
+		
+		if(!empty($mybb->settings['topStats_IgnoreGroups_TimeOnline']))
+		{
+			$tpl['ignore_groups'] = " AND usergroup NOT IN ({$mybb->settings['topStats_IgnoreGroups_TimeOnline']})";
+		}	
+		
+		$lang->topStats_topOnline = $lang->sprintf($lang->topStats_topOnline, (int)$this->getConfig('Limit_TimeOnline'));
+		
+        $tpl['row'] = '';
+
+        $sql = "SELECT username, usergroup, displaygroup, TimeOnline, uid, avatar, avatardimensions
+                FROM ".TABLE_PREFIX."users 
+				WHERE uid != '' ". $tpl['ignore_groups'] . "
+                ORDER BY TimeOnline DESC 
+                LIMIT ". (int) $this->getConfig('Limit_TimeOnline')."";
+        $result = $db->query($sql);
+        while ($row = $db->fetch_array($result))        
+        {
+			$tpl['limit'] = (int) $this->getConfig('Limit_TimeOnline');
+            $tpl['username'] = format_name($row['username'], $row['usergroup'], $row['displaygroup']);
+    		$tpl['profilelink'] = build_profile_link($tpl['username'], $row['uid']);
+    		$tpl['time'] = ($row['TimeOnline'] > 0) ? nice_time($row['TimeOnline'], array('years' => false, 'seconds' => false, 'short' => 1)) : $lang->none_registered;;
+            $useravatar = format_avatar(htmlspecialchars_uni($row['avatar']), $row['avatardimensions'], my_strtolower($this->getConfig('AvatarWidth')));
+            (!$this->getConfig('Status_Avatar')) ? '' : eval("\$tpl['avatar'] = \"".$templates->get("topStats_NewestUsersAvatar")."\";"); 
+            eval("\$tpl['row'] .= \"" . $templates->get("topStats_TimeOnlineRow") . "\";");
+        }
+        eval("\$topStats['TimeOnline'] = \"" . $templates->get("topStats_TimeOnline") . "\";");
+    }
+	
+	/**
      * Widget with newest users
      *   
      */ 
@@ -437,114 +556,104 @@ class topStats
         global $db, $lang, $mybb, $templates, $theme, $topStats;
 
 		$tpl['ignore_groups'] = '';
-		if (!empty($mybb->settings['topStats_IgnoreGroups_NewestUsers']))
+		
+		if(!empty($mybb->settings['topStats_IgnoreGroups_NewestUsers']))
 		{
 			$tpl['ignore_groups'] = " AND usergroup NOT IN ({$mybb->settings['topStats_IgnoreGroups_NewestUsers']})";
 		}	
+		
+		$lang->topStats_NewestUsers = $lang->sprintf($lang->topStats_NewestUsers, (int)$this->getConfig('Limit_NewestUsers'));
+		
         $tpl['row'] = '';
     
         $sql = "SELECT username, usergroup, displaygroup, regdate, postnum, uid, avatar, avatardimensions
                 FROM ".TABLE_PREFIX."users 
-				WHERE uid != '' ". $tpl['ignore_groups'] . "
+				WHERE 1=1 {$tpl['ignore_groups']}
                 ORDER BY regdate DESC 
                 LIMIT ".(int) $this->getConfig('Limit_NewestUsers')."";
         $result = $db->query($sql);
         while ($row = $db->fetch_array($result))        
         {
-			$tpl['limit'] = (int) $this->getConfig('Limit_NewestUsers');
             $tpl['username'] = format_name($row['username'], $row['usergroup'], $row['displaygroup']);
     		$tpl['profilelink'] = build_profile_link($tpl['username'], $row['uid']);
-    		$tpl['date'] = my_date($mybb->settings['dateformat'] . " " . $mybb->settings['timeformat'], $row['regdate'], NULL, 1);
+    		$tpl['date'] = my_date('relative', $row['regdate']);
             $useravatar = format_avatar(htmlspecialchars_uni($row['avatar']), $row['avatardimensions'], my_strtolower($this->getConfig('AvatarWidth')));
             (!$this->getConfig('Status_Avatar')) ? '' : eval("\$tpl['avatar'] = \"".$templates->get("topStats_NewestUsersAvatar")."\";");   
             eval("\$tpl['row'] .= \"" . $templates->get("topStats_NewestUsersRow") . "\";");
         }
         eval("\$topStats['NewestUsers'] = \"" . $templates->get("topStats_NewestUsers") . "\";");
     }
-
-    /**
-     * Widget with users online time
+	
+	/**
+     * Widget with most activ moderators
      *   
      */ 
-    public function widget_Timeonline()
+    public function widget_Moderators()
     {
         global $db, $lang, $mybb, $templates, $theme, $topStats;
+		
+		$lang->topStats_topModerators = $lang->sprintf($lang->topStats_topModerators, (int)$this->getConfig('Limit_Moderators'));
 
-		$tpl['ignore_groups'] = '';
-		if (!empty($mybb->settings['topStats_IgnoreGroups_Timeonline']))
-		{
-			$tpl['ignore_groups'] = " AND usergroup NOT IN ({$mybb->settings['topStats_IgnoreGroups_Timeonline']})";
-		}	
         $tpl['row'] = '';
-
-        $sql = "SELECT username, usergroup, displaygroup, timeonline, uid, avatar, avatardimensions
-                FROM ".TABLE_PREFIX."users 
-				WHERE uid != '' ". $tpl['ignore_groups'] . "
-                ORDER BY timeonline DESC 
-                LIMIT ". (int) $this->getConfig('Limit_Timeonline')."";
+    
+        $sql = "SELECT ml.uid, u.username, u.usergroup, u.displaygroup, u.uid, u.avatar, u.avatardimensions, count(*) as totalactions
+                FROM ".TABLE_PREFIX."moderatorlog as ml 
+				 INNER JOIN ".TABLE_PREFIX."users as u ON (ml.uid=u.uid)
+				WHERE 1=1
+                GROUP BY ml.uid 
+				ORDER BY totalactions  DESC 
+                LIMIT ".(int) $this->getConfig('Limit_Moderators')."";
         $result = $db->query($sql);
         while ($row = $db->fetch_array($result))        
         {
-			$tpl['limit'] = (int) $this->getConfig('Limit_Timeonline');
             $tpl['username'] = format_name($row['username'], $row['usergroup'], $row['displaygroup']);
     		$tpl['profilelink'] = build_profile_link($tpl['username'], $row['uid']);
-    		$tpl['time'] = ($row['timeonline'] > 0) ? nice_time($row['timeonline'], array('years' => false, 'seconds' => false, 'short' => 1)) : $lang->none_registered;;
+    		$tpl['actions'] = my_number_format($row['totalactions']);
             $useravatar = format_avatar(htmlspecialchars_uni($row['avatar']), $row['avatardimensions'], my_strtolower($this->getConfig('AvatarWidth')));
-            (!$this->getConfig('Status_Avatar')) ? '' : eval("\$tpl['avatar'] = \"".$templates->get("topStats_NewestUsersAvatar")."\";"); 
-            eval("\$tpl['row'] .= \"" . $templates->get("topStats_TimeonlineRow") . "\";");
+            (!$this->getConfig('Status_Avatar')) ? '' : eval("\$tpl['avatar'] = \"".$templates->get("topStats_ModeratorsAvatar")."\";");   
+            eval("\$tpl['row'] .= \"" . $templates->get("topStats_ModeratorsRow") . "\";");
         }
-        eval("\$topStats['Timeonline'] = \"" . $templates->get("topStats_Timeonline") . "\";");
+        eval("\$topStats['Moderators'] = \"" . $templates->get("topStats_Moderators") . "\";");
     }
     
-    /**
-     * Build search query except threads/fids
-     *     
-     * @return string WHERE statement   
-     */     
-    private function buildThreadsWhere()
-    {
-        static $where;
-    
-        if ($where != '')
+	/**
+     * Widget with upcoming events
+     *   
+     */ 
+	public function widget_UpcomingEvents()
+    {   
+        global $db, $lang, $mybb, $templates, $theme, $topStats;
+
+		require_once MYBB_ROOT."inc/class_parser.php";
+		require_once MYBB_ROOT."inc/functions_search.php";
+		
+		$parser = new postParser;
+		
+		$tpl['row'] = '';
+		
+		$sql = "SELECT e.uid, e.eid, e.name, e.starttime, u.usergroup, u.displaygroup, u.avatar, u.avatardimensions, u.username, u.uid 	
+				FROM `".TABLE_PREFIX."events` AS e
+				INNER JOIN `".TABLE_PREFIX."users` AS u USING (uid)
+				WHERE e.starttime > UNIX_TIMESTAMP(NOW()) AND e.visible = 1 AND e.private = 0
+				ORDER BY e.starttime DESC LIMIT ".(int)$this->getConfig('Limit_UpcomingEvents') .";";
+        $result = $db->query($sql);
+        while ($row = $db->fetch_array($result))
         {
-            return $where;
-        }
-        $where = "t.visible = 1 AND t.closed NOT LIKE 'moved|%'";
-        $onlyusfids = array();
-        $group_permissions = forum_permissions();
-        foreach ($group_permissions as $fid => $forum_permissions)
-        {
-            if ($forum_permissions['canonlyviewownthreads'] == 1)
-            {
-                $onlyusfids[] = $fid;
-            }
-        }
-        if (!empty($onlyusfids))
-        {
-            $where .= " AND ((t.fid IN(" . implode(',', $onlyusfids) . ") AND t.uid='{$mybb->user['uid']}') OR t.fid NOT IN(" . implode(',', $onlyusfids) . "))";
-        }
-        if (!function_exists('get_unsearchable_forums'))
-        {        
-            if (THIS_SCRIPT == 'index.php')
-            {
-                global $permissioncache;
-                $permissioncache = false;
-            } 
-            require_once MYBB_ROOT."inc/functions_search.php";   
-            $unsearchforums = get_unsearchable_forums();
-            if ($unsearchforums)
-            {                              
-                $where .= " AND t.fid NOT IN ($unsearchforums)";
-            }   
-        }
-        $inactiveforums = get_inactive_forums();
-        if ($inactiveforums)
-        {
-            $where .= " AND t.fid NOT IN ($inactiveforums)";
-        } 
-        return $where;
+			$subject = $parser->parse_badwords(htmlspecialchars_uni($row['name']));
+			$tpl['subject'] = (my_strlen($subject) > 30) ? my_substr($subject, 0, 30) . "..." : $subject;
+			$tpl['username'] = format_name($row['username'], $row['usergroup'], $row['displaygroup']);
+			$tpl['profilelink'] = build_profile_link($tpl['username'], $row['uid']);
+			$tpl['date'] = my_date('relative', $row['starttime']);
+			$tpl['subjectlink'] = get_event_link($row['eid']);
+			$useravatar = format_avatar(htmlspecialchars_uni($row['avatar']), $row['avatardimensions'], my_strtolower($this->getConfig('AvatarWidth')));
+			(!$this->getConfig('Status_Avatar')) ? '' : eval("\$tpl['avatar'] = \"".$templates->get("topStats_UpcomingEventsAvatar")."\";");
+			eval("\$tpl['row'] .= \"" . $templates->get("topStats_UpcomingEventsRow") . "\";");
+		}
+		
+        eval("\$topStats['UpcomingEvents'] = \"" . $templates->get("topStats_UpcomingEvents") . "\";");
+		
     }
-    
+	
     /**
      * Helper function to get variable from config
      * 
