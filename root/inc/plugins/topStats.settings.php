@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Top Stats plugin for MyBB.
- * Copyright (C) 2010-2013 baszaR & LukasAMD & Supryk
+ * Copyright (C) 2010-2018 baszaR & LukasAMD & Supryk & Marcin648
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -93,42 +93,8 @@ class topStatsInstaller
             'gid' => $gid
         );
         $db->insert_query('settings', $setting);
-        
-		$setting = array(
-            'sid' => 'NULL',
-            'name' => 'topStats_Status_LastPosts',
-            'title' => $db->escape_string($lang->topStats_Status_LastPosts),
-            'description' =>  $db->escape_string($lang->topStats_Status_LastPostsDesc),
-            'optionscode' => 'onoff',
-            'value' => '1',
-            'disporder' => $disporder++,
-            'gid' => $gid
-        );
-        $db->insert_query('settings', $setting);
 		
-		$setting = array(
-            'sid' => 'NULL',
-            'name' => 'topStats_IgnoreForums_LastPosts',
-            'title' => $db->escape_string($lang->topStats_IgnoreForums_LastPosts),
-            'description' =>  $db->escape_string($lang->topStats_IgnoreForums_LastPostsDesc),
-            'optionscode' => 'forumselect',
-            'value' => '',
-            'disporder' => $disporder++,
-            'gid' => $gid
-        );
-        $db->insert_query('settings', $setting);
 		
-        $setting = array(
-            'sid' => 'NULL',
-            'name' => 'topStats_Limit_LastPosts',
-            'title' => $db->escape_string($lang->topStats_Limit_LastPosts),
-            'description' =>  $db->escape_string($lang->topStats_Limit_LastPostsDesc),
-            'optionscode' => 'text',
-            'value' => '5',
-            'disporder' => $disporder++,
-            'gid' => $gid
-        );
-        $db->insert_query('settings', $setting);
 				
 		$setting = array(
             'sid' => 'NULL',
@@ -313,9 +279,9 @@ class topStatsInstaller
         
 		$setting = array(
             'sid' => 'NULL',
-            'name' => 'topStats_Status_Timeonline',
-            'title' => $db->escape_string($lang->topStats_Status_Timeonline),
-            'description' =>  $db->escape_string($lang->topStats_Status_TimeonlineDesc),
+            'name' => 'topStats_Status_TimeOnline',
+            'title' => $db->escape_string($lang->topStats_Status_TimeOnline),
+            'description' =>  $db->escape_string($lang->topStats_Status_TimeOnlineDesc),
             'optionscode' => 'onoff',
             'value' => '1',
             'disporder' => $disporder++,
@@ -325,9 +291,9 @@ class topStatsInstaller
 		
 		$setting = array(
             'sid' => 'NULL',
-            'name' => 'topStats_IgnoreGroups_Timeonline',
-            'title' => $db->escape_string($lang->topStats_IgnoreGroups_Timeonline),
-            'description' =>  $db->escape_string($lang->topStats_IgnoreGroups_TimeonlineDesc),
+            'name' => 'topStats_IgnoreGroups_TimeOnline',
+            'title' => $db->escape_string($lang->topStats_IgnoreGroups_TimeOnline),
+            'description' =>  $db->escape_string($lang->topStats_IgnoreGroups_TimeOnlineDesc),
             'optionscode' => 'groupselect',
             'value' => '',
             'disporder' => $disporder++,
@@ -337,9 +303,9 @@ class topStatsInstaller
 		
         $setting = array(
             'sid' => 'NULL',
-            'name' => 'topStats_Limit_Timeonline',
-            'title' => $db->escape_string($lang->topStats_Limit_Timeonline),
-            'description' =>  $db->escape_string($lang->topStats_Limit_TimeonlineDesc),
+            'name' => 'topStats_Limit_TimeOnline',
+            'title' => $db->escape_string($lang->topStats_Limit_TimeOnline),
+            'description' =>  $db->escape_string($lang->topStats_Limit_TimeOnlineDesc),
             'optionscode' => 'text',
             'value' => '5',
             'disporder' => $disporder++,
@@ -382,6 +348,33 @@ class topStatsInstaller
             'gid' => $gid
         );
         $db->insert_query('settings', $setting);
+		
+		
+				$setting = array(
+            'sid' => 'NULL',
+            'name' => 'topStats_Status_Moderators',
+            'title' => $db->escape_string($lang->topStats_Status_Moderators),
+            'description' =>  $db->escape_string($lang->topStats_Status_ModeratorsDesc),
+            'optionscode' => 'onoff',
+            'value' => '1',
+            'disporder' => $disporder++,
+            'gid' => $gid
+        );
+        $db->insert_query('settings', $setting);
+		
+        $setting = array(
+            'sid' => 'NULL',
+            'name' => 'topStats_Limit_Moderators',
+            'title' => $db->escape_string($lang->topStats_Limit_Moderators),
+            'description' =>  $db->escape_string($lang->topStats_Limit_ModeratorsDesc),
+            'optionscode' => 'text',
+            'value' => '5',
+            'disporder' => $disporder++,
+            'gid' => $gid
+        );
+        $db->insert_query('settings', $setting);
+		
+		
         
         $setting = array(
             'sid' => 'NULL',
@@ -406,6 +399,31 @@ class topStatsInstaller
             'gid' => $gid
         );
         $db->insert_query('settings', $setting);
+		
+				$setting = array(
+            'sid' => 'NULL',
+            'name' => 'topStats_Status_UpcomingEvents',
+            'title' => $db->escape_string($lang->topStats_Status_UpcomingEvents),
+            'description' =>  $db->escape_string($lang->topStats_Status_UpcomingEventsDesc),
+            'optionscode' => 'onoff',
+            'value' => '1',
+            'disporder' => $disporder++,
+            'gid' => $gid
+        );
+        $db->insert_query('settings', $setting);
+		
+        $setting = array(
+            'sid' => 'NULL',
+            'name' => 'topStats_Limit_UpcomingEvents',
+            'title' => $db->escape_string($lang->topStats_Limit_UpcomingEvents),
+            'description' =>  $db->escape_string($lang->topStats_Limit_UpcomingEvents),
+            'optionscode' => 'text',
+            'value' => '5',
+            'disporder' => $disporder++,
+            'gid' => $gid
+        );
+        $db->insert_query('settings', $setting);
+		
     }
     
     public static function uninstall()

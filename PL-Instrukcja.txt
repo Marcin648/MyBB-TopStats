@@ -2,7 +2,7 @@
 
 /**
  * This file is part of Top Stats plugin for MyBB.
- * Copyright (C) 2010-2013 baszaR & LukasAMD & Supryk
+ * Copyright (C) 2010-2018 baszaR & LukasAMD & Supryk & Marcin648
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -36,7 +36,6 @@ INSTALACJA:
 
 4. Dodaj do panelu bocznego (w szablonie index) wymagane zmienne dla poszczególnych modułów:
 
-{$topStats['LastPosts']} - ostatnie posty
 {$topStats['LastThreads']} - ostatnie tematy
 {$topStats['LastActiveThreads']} - ostatnio aktywne tematy
 {$topStats['MostViews']} - najczęściej wyświetlane tematy
@@ -45,3 +44,4 @@ INSTALACJA:
 {$topStats['Referrals']} - użytkownicy z największą ilością poleconych
 {$topStats['Timeonline']} - użytkownicy z najdłuższym czasem online
 {$topStats['NewestUsers']} - najnowsi użytkownicy
+{$topStats['UpcomingEvents']} - Nadchodzące wydarzenia

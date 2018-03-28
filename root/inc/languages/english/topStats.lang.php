@@ -24,16 +24,16 @@
  */
 if (!defined("IN_MYBB")) exit;
 
-$l['topStats_LastThreads'] = "Najnowsze tematy";
-$l['topStats_LastActiveThreads'] = "Ostatnio aktywne tematy";
-$l['topStats_MostViews'] = "Najwięcej wyświetlane";
-$l['topStats_topPosters'] = "Top {1} piszących";
-$l['topStats_topReputation'] = "Top {1} reputacji";
-$l['topStats_topReferrals'] = "Top {1} polecających";
-$l['topStats_topOnline'] = "Top {1} czasu online";   
-$l['topStats_topOnlineTime'] = "Czas online"; 
-$l['topStats_NewestUsers'] = "{1} ostatnio zarejestrowanych";   
-$l['topStats_NewestUsersJoin'] = "Dołaczył";
-$l['topStats_topModerators'] = "Top {1} moderatorów";  
-$l['topStats_topModeratorsActions'] = "Akcji";
-$l['topStats_UpcomingEvents'] = "Nadchodzące wydarzenia";
+$l['topStats_LastThreads'] = "Newest threads";
+$l['topStats_LastActiveThreads'] = "Last active threads";
+$l['topStats_MostViews'] = "Most views threads";
+$l['topStats_topPosters'] = "Top {1} posters";
+$l['topStats_topReputation'] = "Top {1} reputation";
+$l['topStats_topReferrals'] = "Top {1} referrals";
+$l['topStats_topOnline'] = "Top {1} time online";
+$l['topStats_topOnlineTime'] = "Time online";    
+$l['topStats_NewestUsers'] = "{1} newest users";   
+$l['topStats_NewestUsersJoin'] = "Joinedł";
+$l['topStats_topModerators'] = "Top {1} moderators";  
+$l['topStats_topModeratorsActions'] = "Actions";
+$l['topStats_UpcomingEvents'] = "Upcoming events";  

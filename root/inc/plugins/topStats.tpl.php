@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Top Stats plugin for MyBB.
- * Copyright (C) 2010-2013 baszaR & LukasAMD & Supryk
+ * Copyright (C) 2010-2018 baszaR & LukasAMD & Supryk & Marcin648
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -70,49 +70,9 @@ class topStatsActivator
             "version" => "1.0",
             "dateline" => TIME_NOW,
         );
-        
-        self::$tpl[] = array(
-            "tid" => NULL,
-            "title" => 'topStats_LastPosts',
-            "template" => $db->escape_string('
-            <table border="0" cellspacing="{$theme[\'borderwidth\']}" cellpadding="{$theme[\'tablespace\']}" class="tborder">
-            <tr><td class="thead" colspan="1"><strong>{$lang->topStats_LastPosts}</strong></td></tr>
-            {$tpl[\'row\']}
-            </table><br />
-            '),
-            "sid" => "-1",
-            "version" => "1.0",
-            "dateline" => TIME_NOW,
-        );
 		
-        self::$tpl[] = array(
-            "tid" => NULL,
-            "title" => 'topStats_LastPostsRow',
-            "template" => $db->escape_string('
-            <tr><td class="trow1">
-            {$tpl[\'avatar\']}
-            <a href="{$tpl[\'subjectlink\']}">{$tpl[\'subject\']}</a><br />
-            {$tpl[\'profilelink\']}<span style="float: right;widthmargin-right: 5px;">{$tpl[\'date\']}</span>
-            </td></tr>
-            '),
-            "sid" => "-1",
-            "version" => "1.0",
-            "dateline" => TIME_NOW,
-        );
 		
 		self::$tpl[] = array(
-            "tid" => NULL,
-            "title" => 'topStats_LastPostsAvatar',
-            "template" => $db->escape_string('
-            <img src="{$useravatar[\'image\']}" alt="" style="float: left;margin-right: 5px;" {$useravatar[\'width_height\']}/>
-            '),
-            "sid" => "-1",
-            "version" => "1.0",
-            "dateline" => TIME_NOW,
-        );
-		
-		
-		        self::$tpl[] = array(
             "tid" => NULL,
             "title" => 'topStats_LastActiveThreads',
             "template" => $db->escape_string('
@@ -198,7 +158,7 @@ class topStatsActivator
             "title" => 'topStats_Posters',
             "template" => $db->escape_string('
             <table border="0" cellspacing="{$theme[\'borderwidth\']}" cellpadding="{$theme[\'tablespace\']}" class="tborder">
-            <tr><td class="thead" colspan="1"><strong>{$lang->topStats_Top} {$tpl[\'limit\']} {$lang->topStats_Posters}</strong></td></tr>
+            <tr><td class="thead" colspan="1"><strong>{$lang->topStats_topPosters}</strong></td></tr>
             {$tpl[\'row\']}</table><br />
             '),
             "sid" => "-1",
@@ -238,7 +198,7 @@ class topStatsActivator
             "title" => 'topStats_Reputation',
             "template" => $db->escape_string('
             <table border="0" cellspacing="{$theme[\'borderwidth\']}" cellpadding="{$theme[\'tablespace\']}" class="tborder">
-            <tr><td class="thead" colspan="1"><strong>{$lang->topStats_Top} {$tpl[\'limit\']} {$lang->topStats_Reputation}</strong></td></tr>
+            <tr><td class="thead" colspan="1"><strong>{$lang->topStats_topReputation}</strong></td></tr>
             {$tpl[\'row\']}</table><br />     
             '),
             "sid" => "-1",
@@ -278,7 +238,7 @@ class topStatsActivator
             "title" => 'topStats_Referrals',
             "template" => $db->escape_string('
             <table border="0" cellspacing="{$theme[\'borderwidth\']}" cellpadding="{$theme[\'tablespace\']}" class="tborder">
-            <tr><td class="thead" colspan="1"><strong>{$lang->topStats_Top} {$tpl[\'limit\']} {$lang->topStats_Referrals}</strong></td></tr>
+            <tr><td class="thead" colspan="1"><strong>{$lang->topStats_topReferrals}</strong></td></tr>
             {$tpl[\'row\']}</table><br />     
             '),
             "sid" => "-1",
@@ -315,10 +275,10 @@ class topStatsActivator
 		
 		self::$tpl[] = array(
             "tid" => NULL,
-            "title" => 'topStats_Timeonline',
+            "title" => 'topStats_TimeOnline',
             "template" => $db->escape_string('
             <table border="0" cellspacing="{$theme[\'borderwidth\']}" cellpadding="{$theme[\'tablespace\']}" class="tborder">
-            <tr><td class="thead" colspan="1"><strong>{$lang->topStats_Top} {$tpl[\'limit\']} {$lang->topStats_Online}</strong></td></tr>
+            <tr><td class="thead" colspan="1"><strong>{$lang->topStats_topOnline}</strong></td></tr>
             {$tpl[\'row\']}</table><br />      		
             '),
             "sid" => "-1",
@@ -328,11 +288,11 @@ class topStatsActivator
 		
         self::$tpl[] = array(
             "tid" => NULL,
-            "title" => 'topStats_TimeonlineRow',
+            "title" => 'topStats_TimeOnlineRow',
             "template" => $db->escape_string('
             <td class="trow1">
             {$tpl[\'avatar\']}
-            {$tpl[\'profilelink\']}<br />{$lang->topStats_OnlineTime}: {$tpl[\'time\']}  
+            {$tpl[\'profilelink\']}<br />{$lang->topStats_topOnlineTime}: {$tpl[\'time\']}  
             </td></tr>       
             '),
             "sid" => "-1",
@@ -342,7 +302,7 @@ class topStatsActivator
 		
 		self::$tpl[] = array(
             "tid" => NULL,
-            "title" => 'topStats_TimeonlineAvatar',
+            "title" => 'topStats_TimeOnlineAvatar',
             "template" => $db->escape_string('
             <img src="{$useravatar[\'image\']}" alt="" style="float: left;margin-right: 5px;" {$useravatar[\'width_height\']}/>
             '),
@@ -357,7 +317,7 @@ class topStatsActivator
             "title" => 'topStats_NewestUsers',
             "template" => $db->escape_string('
             <table border="0" cellspacing="{$theme[\'borderwidth\']}" cellpadding="{$theme[\'tablespace\']}" class="tborder">
-            <tr><td class="thead" colspan="1"><strong>{$tpl[\'limit\']} {$lang->topStats_NewestUsers}</strong></td></tr>
+            <tr><td class="thead" colspan="1"><strong>{$lang->topStats_NewestUsers}</strong></td></tr>
             {$tpl[\'row\']}</table><br /> 
             '),
             "sid" => "-1",
@@ -382,6 +342,85 @@ class topStatsActivator
 		self::$tpl[] = array(
             "tid" => NULL,
             "title" => 'topStats_NewestUsersAvatar',
+            "template" => $db->escape_string('
+            <img src="{$useravatar[\'image\']}" alt="" style="float: left;margin-right: 5px;" {$useravatar[\'width_height\']}/>
+            '),
+            "sid" => "-1",
+            "version" => "1.0",
+            "dateline" => TIME_NOW,
+        );
+		
+		self::$tpl[] = array(
+            "tid" => NULL,
+            "title" => 'topStats_Moderators',
+            "template" => $db->escape_string('
+            <table border="0" cellspacing="{$theme[\'borderwidth\']}" cellpadding="{$theme[\'tablespace\']}" class="tborder">
+            <tr><td class="thead" colspan="1"><strong>{$lang->topStats_topModerators}</strong></td></tr>
+            {$tpl[\'row\']}</table><br />     
+            '),
+            "sid" => "-1",
+            "version" => "1.0",
+            "dateline" => TIME_NOW,
+        );
+		
+        self::$tpl[] = array(
+            "tid" => NULL,
+            "title" => 'topStats_ModeratorsRow',
+            "template" => $db->escape_string('
+            <tr><td class="trow1">
+            {$tpl[\'avatar\']}
+            <span style="margin-top: 7px;float: left;">{$tpl[\'profilelink\']}</span>
+            <span style="float: right;margin-right: 5px;margin-top: 7px;">{$tpl[\'actions\']}</span>
+            </td></tr>  
+            '),
+            "sid" => "-1",
+            "version" => "1.0",
+            "dateline" => TIME_NOW,
+        );
+		
+		self::$tpl[] = array(
+            "tid" => NULL,
+            "title" => 'topStats_ModeratorsAvatar',
+            "template" => $db->escape_string('
+            <img src="{$useravatar[\'image\']}" alt="" style="float: left;margin-right: 5px;" {$useravatar[\'width_height\']}/>
+            '),
+            "sid" => "-1",
+            "version" => "1.0",
+            "dateline" => TIME_NOW,
+        );
+		
+		self::$tpl[] = array(
+            "tid" => NULL,
+            "title" => 'topStats_UpcomingEvents',
+            "template" => $db->escape_string('
+            <table border="0" cellspacing="{$theme[\'borderwidth\']}" cellpadding="{$theme[\'tablespace\']}" class="tborder">
+            <tr><td class="thead" colspan="1"><strong>{$lang->topStats_UpcomingEvents}</strong></td></tr>
+            {$tpl[\'row\']}
+            </table><br />
+            '),
+            "sid" => "-1",
+            "version" => "1.0",
+            "dateline" => TIME_NOW,
+        );
+		
+        self::$tpl[] = array(
+            "tid" => NULL,
+            "title" => 'topStats_UpcomingEventsRow',
+            "template" => $db->escape_string('
+            <tr><td class="trow1">
+            {$tpl[\'avatar\']}
+            <a href="{$tpl[\'subjectlink\']}">{$tpl[\'subject\']}</a><br />
+            {$tpl[\'profilelink\']}<span style="float: right;widthmargin-right: 5px;">{$tpl[\'date\']}</span>
+            </td></tr>
+            '),
+            "sid" => "-1",
+            "version" => "1.0",
+            "dateline" => TIME_NOW,
+        );
+		
+		self::$tpl[] = array(
+            "tid" => NULL,
+            "title" => 'topStats_UpcomingEventsAvatar',
             "template" => $db->escape_string('
             <img src="{$useravatar[\'image\']}" alt="" style="float: left;margin-right: 5px;" {$useravatar[\'width_height\']}/>
             '),
