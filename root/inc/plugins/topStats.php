@@ -620,7 +620,7 @@ class topStats
      * Widget with upcoming events
      *   
      */ 
-	public function widget_UpcomingEvents()
+    public function widget_UpcomingEvents()
     {   
         global $db, $lang, $mybb, $templates, $theme, $topStats;
 
@@ -635,7 +635,7 @@ class topStats
 				FROM `".TABLE_PREFIX."events` AS e
 				INNER JOIN `".TABLE_PREFIX."users` AS u USING (uid)
 				WHERE e.starttime > UNIX_TIMESTAMP(NOW()) AND e.visible = 1 AND e.private = 0
-				ORDER BY e.starttime DESC LIMIT ".(int)$this->getConfig('Limit_UpcomingEvents') .";";
+				ORDER BY e.starttime LIMIT ".(int)$this->getConfig('Limit_UpcomingEvents') .";";
         $result = $db->query($sql);
         while ($row = $db->fetch_array($result))
         {
