@@ -44,4 +44,4 @@ INSTALACJA:
 {$topStats['Referrals']} - użytkownicy z największą ilością poleconych
 {$topStats['Timeonline']} - użytkownicy z najdłuższym czasem online
 {$topStats['NewestUsers']} - najnowsi użytkownicy
-{$topStats['UpcomingEvents']} - Nadchodzące wydarzenia
+{$topStats['UpcomingEvents']} - nadchodzące wydarzenia
